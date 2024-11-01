@@ -1,5 +1,4 @@
 import { Helmet } from "react-helmet-async";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,42 +7,36 @@ import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "@/services/userServices";
 
 const signInForm = z.object({
   email: z.string().email(),
   password: z
     .string()
     .min(6, { message: "A senha deve ter pelo menos 6 caracteres" })
-    .regex(/[A-Z]/, {
-      message: "A senha deve ter pelo menos uma letra maiúscula",
-    })
-    .regex(/[a-z]/, {
-      message: "A senha deve ter pelo menos uma letra minúscula",
-    })
+    .regex(/[A-Z]/, { message: "A senha deve ter pelo menos uma letra maiúscula" })
+    .regex(/[a-z]/, { message: "A senha deve ter pelo menos uma letra minúscula" })
     .regex(/[0-9]/, { message: "A senha deve ter pelo menos um número" }),
 });
 
 type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignInForm>();
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState: { isSubmitting } } = useForm<SignInForm>();
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   async function handleSignIn(data: SignInForm) {
     try {
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const response = await login(data.email, data.password);
+      localStorage.setItem("token", response.token);
       toast.success("Login realizado com sucesso!");
+      navigate("/");
     } catch (error) {
-      toast.error("Erro ao fazer login. Tente novamente!");
+      toast.error("Erro ao fazer login. Verifique suas credenciais!");
     }
   }
-
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   const togglePasswordVisible = () => {
     setIsPasswordVisible((prev) => !prev);
@@ -53,17 +46,15 @@ export function SignIn() {
     <>
       <Helmet title="Login" />
       <div className="p-8">
-        <Button variant='outline' asChild className="absolute right-8 top-8">
-        <Link to='/sign-up'>
-        Crie sua conta
-        </Link>
+        <Button variant="outline" asChild className="absolute right-8 top-8">
+          <Link to="/sign-up">Crie sua conta</Link>
         </Button>
         <div className="flex w-[350px] flex-col justify-center gap-6">
           <div className="flex flex-col gap-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight text-secondary-foreground">
+            <h1 className="text-3xl font-semibold tracking-tight text-secondary-foreground">
               Acessar biblioteca
             </h1>
-            <p className="text-sm text-secondary-foreground">
+            <p className="text-sm text-muted-foreground">
               Entre na sua estante personalizada de tecnologia!
             </p>
           </div>
@@ -73,7 +64,7 @@ export function SignIn() {
               <Input id="email" type="email" {...register("email")} />
             </div>
             <div className="space-y-2">
-              <Label className="text-secondary-foreground" htmlFor="email">Sua senha</Label>
+              <Label className="text-secondary-foreground" htmlFor="password">Sua senha</Label>
               <div className="relative">
                 <Input
                   id="password"

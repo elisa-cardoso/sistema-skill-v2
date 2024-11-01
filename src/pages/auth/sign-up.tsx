@@ -67,14 +67,14 @@ export function SignUp() {
     <>
       <Helmet title="Cadastro" />
       <div className="p-8">
-      <Button variant='defaultUp' asChild className="absolute right-8 top-8">
+      <Button variant='outline' asChild className="absolute right-8 top-8">
         <Link to='/sign-in'>
         Sua biblioteca
         </Link>
         </Button>
         <div className="flex w-[350px] flex-col justify-center gap-6">
           <div className="flex flex-col gap-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight text-muted-foreground">
+            <h1 className="text-3xl font-semibold tracking-tight text-secondary-foreground">
               Crie sua conta
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -129,11 +129,11 @@ export function SignUp() {
             </Button>
             <p className="px-6 text-center text-sm leading-relaxed text-muted-foreground">
               Ao continuar, você concorda com nossos{' '}
-              <a href="" className="underline underline-offset-4">
+              <a href="" className="underline underline-offset-4 text-white">
                 termos de serviço
               </a>{' '}
               e{' '}
-              <a href="" className="underline underline-offset-4">
+              <a href="" className="underline underline-offset-4 text-white">
                 políticas de privacidade
               </a>
             </p>

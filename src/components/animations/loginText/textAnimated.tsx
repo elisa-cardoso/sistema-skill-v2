@@ -12,15 +12,15 @@ export default function TextAnimated() {
       height: 0,
       innerHeight: 0,
       transform: 'perspective(600px) rotateX(0deg)',
-      color: '#36A49F',
+      color: '#257d73',
     },
     enter: [
       { opacity: 1, height: 80, innerHeight: 80 },
-      { transform: 'perspective(600px) rotateX(180deg)', color: '#F7FAF9' },
+      { transform: 'perspective(600px) rotateX(180deg)', color: '#111111' },
       { transform: 'perspective(600px) rotateX(0deg)' },
     ],
-    leave: [{ color: '#F7FAF9' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
-    update: { color: '#36A49F' },
+    leave: [{ color: '#111111' }, { innerHeight: 0 }, { opacity: 0, height: 0 }],
+    update: { color: '#257d73' },
   })
 
   const reset = useCallback(() => {

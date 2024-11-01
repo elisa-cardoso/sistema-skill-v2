@@ -12,11 +12,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    font-family: 'Lato';
+    font-family: 'Inter';
     font-size: 5em;
     font-weight: 900;
     font-style: italic;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     will-change: transform, opacity, height;
     white-space: nowrap;
     cursor: pointer;
