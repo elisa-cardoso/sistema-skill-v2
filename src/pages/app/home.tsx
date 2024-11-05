@@ -2,8 +2,10 @@ import { Banner } from "@/components/banner";
 import { CategoryFilter } from "@/components/categoryFilter";
 import { PostCard } from "@/components/postCard";
 import { Search } from "@/components/search";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 export function Home() {
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   return (
     <>
       <Helmet title="Home" />
@@ -12,9 +14,9 @@ export function Home() {
         </div>
         <div className="">
         <Search />
-        <CategoryFilter />
+        <CategoryFilter onSelectCategory={setSelectedCategory} />
         </div> 
-        <PostCard />    
+        <PostCard selectedCategory={selectedCategory} />    
     </>
   );
 }

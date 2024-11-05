@@ -10,6 +10,10 @@ export async function login(login: string, password: string): Promise<LoginRespo
         localStorage.setItem('token', response.data.token);
     }
 
+    if (response.data.login) {
+      localStorage.setItem('login', response.data.login);
+    }
+
     return response.data;
   } catch (error) {
     throw new Error("Erro ao fazer login: " + error);

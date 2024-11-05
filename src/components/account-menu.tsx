@@ -1,4 +1,4 @@
-import { Building, ChevronDown, LogOut, User } from 'lucide-react'
+import { ChevronDown, User } from 'lucide-react'
 import { Button } from './ui/button'
 import {
   DropdownMenu,
@@ -8,7 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
+import { LogoutButton } from './logout'
 export function AccountMenu() {
+  const login = localStorage.getItem('login');
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,15 +25,14 @@ export function AccountMenu() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="flex flex-col">
-          <span>Diego Fernandes</span>
+          <span>Bem vindo(a)!</span>
           <span className="text-xs font-normal text-muted-foreground">
-            elisa.pessamilio@email.com.br
+          {login} 
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-rose-500 dark:text-rose-400">
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Sair</span>
+          <LogoutButton />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
