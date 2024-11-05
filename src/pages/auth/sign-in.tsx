@@ -9,9 +9,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@/services/userServices";
+import { LogoutButton } from "@/components/logout";
 
 const signInForm = z.object({
-  email: z.string().email(),
+  login: z.string().email(),
   password: z
     .string()
     .min(6, { message: "A senha deve ter pelo menos 6 caracteres" })
@@ -28,9 +29,14 @@ export function SignIn() {
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
   async function handleSignIn(data: SignInForm) {
+    console.log(data);
     try {
-      const response = await login(data.email, data.password);
-      localStorage.setItem("token", response.token);
+      const response = await login(data.login, data.password);
+      
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        console.log("Token armazenado:", response.token); 
+      }
       toast.success("Login realizado com sucesso!");
       navigate("/");
     } catch (error) {
@@ -61,7 +67,7 @@ export function SignIn() {
           <form className="space-y-4" onSubmit={handleSubmit(handleSignIn)}>
             <div className="space-y-2">
               <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register("email")} />
+              <Input id="login" type="email" {...register("login")} />
             </div>
             <div className="space-y-2">
               <Label className="text-secondary-foreground" htmlFor="password">Sua senha</Label>
@@ -85,6 +91,7 @@ export function SignIn() {
               Acessar painel
             </Button>
           </form>
+          <LogoutButton />
         </div>
       </div>
     </>

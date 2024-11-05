@@ -10,7 +10,7 @@ import {
   import { useEffect, useState } from "react";
   import { getSkills } from "@/services/skillServices";
   import { Skills } from "@/@types/skills";
-  import { ClipLoader } from "react-spinners"; // Importando o spinner
+  import { ClipLoader } from "react-spinners";
   
   export function PostCard() {
       const [skills, setSkills] = useState<Skills[]>([]);
@@ -51,7 +51,7 @@ import {
               </CardHeader>
               <CardContent>
                 <CardTitle>{skill.title}</CardTitle>
-                <div className="text-primary mb-2">{skill.categories.join(", ")}</div>
+                <div className="text-primary mb-2">{skill.categoryIds}</div>
                 <CardDescription>{skill.description}</CardDescription>
               </CardContent>
               <CardFooter>
