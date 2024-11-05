@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSkills } from "@/services/skillServices";
+import { getSkills, getSkillsByTitle, getSkillsByTitleAndCategory } from "@/services/skillServices";
 import { Skills } from "@/@types/skills";
 import { ClipLoader } from "react-spinners";
 import {
@@ -14,10 +14,11 @@ import { Button } from "./ui/button";
 import { getSkillsByCategory } from "@/services/categoryServices";
 
 interface PostCardProps {
-  selectedCategory: number | null; 
+  selectedCategory: number | null;
+  searchTitle: string;
 }
 
-export function PostCard({ selectedCategory }: PostCardProps) {
+export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
   const [skills, setSkills] = useState<Skills[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -26,10 +27,9 @@ export function PostCard({ selectedCategory }: PostCardProps) {
     async function fetchSkills() {
       setLoading(true);
       setError(null);
+
       try {
-        const data = selectedCategory
-          ? await getSkillsByCategory(selectedCategory)
-          : await getSkills(); 
+        const data = await getSkillsByTitleAndCategory(selectedCategory, searchTitle);
         setSkills(data);
       } catch (err) {
         setError("Erro ao carregar conhecimentos.");
@@ -39,7 +39,7 @@ export function PostCard({ selectedCategory }: PostCardProps) {
     }
 
     fetchSkills();
-  }, [selectedCategory]);
+  }, [selectedCategory, searchTitle]);
 
   if (loading) {
     return (
@@ -50,7 +50,11 @@ export function PostCard({ selectedCategory }: PostCardProps) {
   }
 
   if (skills.length === 0) {
-    return <p className="text-center">Nenhum conhecimento encontrado para esta categoria.</p>;
+    return (
+      <p className="text-center">
+        Nenhum conhecimento encontrado para esta categoria.
+      </p>
+    );
   }
 
   return (

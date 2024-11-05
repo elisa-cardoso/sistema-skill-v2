@@ -40,7 +40,7 @@ export function CategoryFilter({ onSelectCategory }: CategoryFilterProps) {
         <Button
           key={category.id}
           variant="blue"
-          className={`text-sm ${selectedCategory === category.id ? 'bg-blue-500 text-white' : ''}`}
+          className={`text-sm ${selectedCategory === category.id ? 'bg-chart-2 text-white' : ''}`}
           size="sm"
           onClick={() => handleCategorySelect(category.id)}
         >

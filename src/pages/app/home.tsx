@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 export function Home() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [searchTitle, setSearchTitle] = useState<string>("");
+
   return (
     <>
       <Helmet title="Home" />
@@ -13,10 +15,10 @@ export function Home() {
         <Banner />
         </div>
         <div className="">
-        <Search />
+        <Search onSearch={setSearchTitle} />
         <CategoryFilter onSelectCategory={setSelectedCategory} />
         </div> 
-        <PostCard selectedCategory={selectedCategory} />    
+        <PostCard selectedCategory={selectedCategory} searchTitle={searchTitle} />    
     </>
   );
 }
