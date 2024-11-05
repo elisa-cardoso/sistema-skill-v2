@@ -28,3 +28,8 @@ export async function getSkillsByTitleAndCategory(categoryId: number | null, tit
     return getSkills();
   }
 }
+
+export async function getSkillById(id: number) {
+  const response = await api.get(`/skill/${id}`);
+  return response.data;
+}

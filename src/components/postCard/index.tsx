@@ -12,7 +12,8 @@ import {
 } from "../ui/card";
 import { Button } from "../ui/button";
 
-import './styles.css'
+import "./styles.css";
+import { Link } from "react-router-dom";
 
 interface PostCardProps {
   selectedCategory: number | null;
@@ -30,7 +31,10 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
       setError(null);
 
       try {
-        const data = await getSkillsByTitleAndCategory(selectedCategory, searchTitle);
+        const data = await getSkillsByTitleAndCategory(
+          selectedCategory,
+          searchTitle
+        );
         setSkills(data);
       } catch (err) {
         setError("Erro ao carregar conhecimentos.");
@@ -59,7 +63,7 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-4 p-4">
+    <div className="flex flex-wrap justify-center gap-4">
       {skills.map((skill) => (
         <Card key={skill.id} className="w-80 bg-transparent shadow-md">
           <CardHeader>
@@ -73,12 +77,24 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
             <CardTitle>{skill.title}</CardTitle>
             <div className="text-primary text-sm flex flex-wrap gap-1">
               {skill.category.map((category) => (
-              <span key={category.id} className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs mt-2">{category.name}{' '}</span>
-            ))}</div>
-            <CardDescription className="description-clamp mt-4">{skill.description}</CardDescription>
+                <span
+                  key={category.id}
+                  className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs mt-2"
+                >
+                  {category.name}{" "}
+                </span>
+              ))}
+            </div>
+            <CardDescription className="description-clamp mt-4">
+              {skill.description}
+            </CardDescription>
           </CardContent>
           <CardFooter className="flex space-x-2">
-            <Button variant='outline' className="flex-1">Saiba Mais</Button>
+            <Link to={`/habilidade/${skill.id}`}>
+              <Button variant="outline" className="flex-1">
+                Saiba Mais
+              </Button>
+            </Link>
             <Button className="flex-1">Iniciar Teste</Button>
           </CardFooter>
         </Card>

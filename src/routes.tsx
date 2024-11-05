@@ -4,6 +4,7 @@ import { Home } from './pages/app/home'
 import { AppLayout } from './pages/_layout/app'
 import { AuthLayout } from './pages/_layout/auth'
 import { SignUp } from './pages/auth/sign-up'
+import { SkillDetail } from './pages/app/skillDetail'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
           {
             path: '/bibliteca',
             element: <Home />,
+          },
+          {
+            path: '/habilidade/:id',
+            element: <SkillDetail />,
           },
           {
             path: '/gerenciar/conhecimento',
