@@ -2,7 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@/services/userServices";
 import { LogoutButton } from "@/components/logout";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const signInForm = z.object({
   login: z.string().email(),
@@ -25,8 +26,17 @@ type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { isSubmitting } } = useForm<SignInForm>();
+  const { register, setValue, handleSubmit, formState: { isSubmitting } } = useForm<SignInForm>({
+    resolver: zodResolver(signInForm),
+  });
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    const savedLogin = localStorage.getItem("login");
+    if (savedLogin) {
+      setValue("login", savedLogin);
+    }
+  }, [setValue]);
 
   async function handleSignIn(data: SignInForm) {
     console.log(data);
@@ -91,7 +101,6 @@ export function SignIn() {
               Acessar painel
             </Button>
           </form>
-          <LogoutButton />
         </div>
       </div>
     </>

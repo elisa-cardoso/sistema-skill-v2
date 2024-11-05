@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSkills, getSkillsByTitle, getSkillsByTitleAndCategory } from "@/services/skillServices";
+import { getSkillsByTitleAndCategory } from "@/services/skillServices";
 import { Skills } from "@/@types/skills";
 import { ClipLoader } from "react-spinners";
 import {
@@ -9,9 +9,10 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "./ui/card";
-import { Button } from "./ui/button";
-import { getSkillsByCategory } from "@/services/categoryServices";
+} from "../ui/card";
+import { Button } from "../ui/button";
+
+import './styles.css'
 
 interface PostCardProps {
   selectedCategory: number | null;
@@ -70,11 +71,15 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
           </CardHeader>
           <CardContent>
             <CardTitle>{skill.title}</CardTitle>
-            <div className="text-primary mb-2">{skill.categoryIds}</div>
-            <CardDescription>{skill.description}</CardDescription>
+            <div className="text-primary text-sm flex flex-wrap gap-1">
+              {skill.category.map((category) => (
+              <span key={category.id} className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs mt-2">{category.name}{' '}</span>
+            ))}</div>
+            <CardDescription className="description-clamp mt-4">{skill.description}</CardDescription>
           </CardContent>
-          <CardFooter>
-            <Button>Saiba Mais</Button>
+          <CardFooter className="flex space-x-2">
+            <Button variant='outline' className="flex-1">Saiba Mais</Button>
+            <Button className="flex-1">Iniciar Teste</Button>
           </CardFooter>
         </Card>
       ))}

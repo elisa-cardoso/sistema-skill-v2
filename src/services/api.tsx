@@ -20,21 +20,23 @@ api.interceptors.request.use(
 
     return config;
   },
+  
   (error: AxiosError) => {
-    if (error.response && error.response.status === 401) {
-      console.error('Token expirado. Redirecionando para login...');
-    }
-
     return Promise.reject(error);
   }
 );
 
-// Interceptor de resposta
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
-    if (error.response && error.response.status === 401) {
-      window.location.href = '/login';
+    if (error.response) {
+      if (error.response.status === 401) {
+        console.error('Token expirado. Redirecionando para login...');
+        
+        localStorage.removeItem('token');
+        localStorage.removeItem('login');
+        window.location.href = '/sign-in';
+      }
     }
     return Promise.reject(error);
   }

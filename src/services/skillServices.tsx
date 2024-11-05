@@ -13,6 +13,7 @@ export async function getSkillsByTitle(title: string): Promise<Skills[]> {
   return response.data;
 }
 
+// melhorar no back
 export async function getSkillsByTitleAndCategory(categoryId: number | null, title: string | null): Promise<Skills[]> {
   if (categoryId && title) {
     const skillsByCategory = await getSkillsByCategory(categoryId);

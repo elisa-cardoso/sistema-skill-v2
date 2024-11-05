@@ -8,11 +8,14 @@ import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { signUp } from "@/services/userServices";
+import { LoginRequest } from "@/@types/user";
+import { zodResolver } from '@hookform/resolvers/zod';
 
 const signUpForm = z
   .object({
-    email: z.string().email(),
+    login: z.string().email(),
     password: z
       .string()
       .min(6, { message: "A senha deve ter pelo menos 6 caracteres" })
@@ -35,21 +38,30 @@ const signUpForm = z
 type SignUpForm = z.infer<typeof signUpForm>;
 
 export function SignUp() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignUpForm>();
+    formState: { isSubmitting, errors },
+  } = useForm<SignUpForm>({
+    resolver: zodResolver(signUpForm),
+  });
 
   async function handleSignUp(data: SignUpForm) {
     try {
-      console.log(data);
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const registerData: LoginRequest = {
+        login: data.login,
+        password: data.password,
+      };
+      await signUp(registerData.login, registerData.password); 
       toast.success("Cadastro realizado com sucesso!");
+      navigate("/sign-in");
     } catch (error) {
+      console.error(error);
       toast.error("Erro ao cadastrar. Tente novamente!");
     }
   }
+
 
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
@@ -83,8 +95,9 @@ export function SignUp() {
           </div>
           <form className="space-y-4" onSubmit={handleSubmit(handleSignUp)}>
             <div className="space-y-2">
-              <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" {...register("email")} />
+              <Label htmlFor="login">Seu e-mail</Label>
+              <Input id="login" type="email" {...register("login")} />
+              {errors.login && <p className="text-sm text-destructive">{errors.login.message}</p>}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Sua senha</Label>
@@ -103,10 +116,11 @@ export function SignUp() {
                   {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Confirmar senha</Label>
+              <Label htmlFor="confirmPassword">Confirmar senha</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -122,6 +136,7 @@ export function SignUp() {
                   {isConfirmPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
+              {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
             </div>
 
             <Button className="w-full" type="submit" disabled={isSubmitting}>

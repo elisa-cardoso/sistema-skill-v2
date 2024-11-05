@@ -1,7 +1,9 @@
+import { Category } from "./category";
+
 export interface Skills {
     id: number;
     image: string;
     title: string;
-    categoryIds: number[];
+    category: Category[];
     description: string;
   }
