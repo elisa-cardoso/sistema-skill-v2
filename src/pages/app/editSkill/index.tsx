@@ -53,8 +53,7 @@ export function EditSkill() {
         setValue("description", skill.description);
         setValue("image", skill.image);
 
-        const categoryIds = skill.categories?.map((category: { id: number }) => category.id) || [];
-
+        const categoryIds = skill.category?.map((category: { id: number }) => category.id) || [];
         const selectedCategories = categories
           .filter(category => categoryIds.includes(category.id))
           .map(category => ({
@@ -66,7 +65,7 @@ export function EditSkill() {
         setValue("category", categoryIds);
       } catch (error) {
         console.error("Erro ao buscar habilidade:", error);
-        toast.error("Erro ao buscar habilidade.");  // Usando o toast em vez do alert
+        toast.error("Erro ao buscar habilidade.");
       }
     };
 
@@ -83,7 +82,7 @@ export function EditSkill() {
   const onSubmit = async (data: EditForm) => {
     try {
       if (selectedCategory.length === 0) {
-        toast.error("Selecione pelo menos uma categoria.");  // Usando o toast para erro
+        toast.error("Selecione pelo menos uma categoria.");
         return;
       }
 
@@ -97,18 +96,20 @@ export function EditSkill() {
 
       await updateSkill(Number(id), skillData);
 
-      toast.success("Habilidade atualizada com sucesso!");  // Usando o toast para sucesso
+      toast.success("Habilidade atualizada com sucesso!");
       navigate("/gerenciar/conhecimento");
     } catch (error) {
       console.error("Erro ao atualizar a habilidade:", error);
-      toast.error("Erro ao atualizar a habilidade.");  // Usando o toast para erro
+      toast.error("Erro ao atualizar a habilidade.");
     }
   };
 
   return (
     <div className="flex justify-center">
       <form onSubmit={handleSubmit(onSubmit)} className="w-2/3">
-        <h1 className="text-2xl text-center my-8 font-bold">Atualizar Habilidade</h1>
+      <h1 className="text-3xl text-center my-8 font-bold tracking-tight">
+          Atualizar conhecimento
+        </h1>
         
         <div className="mt-4">
           <Label htmlFor="title" className="block mb-2 text-sm">Título</Label>

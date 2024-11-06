@@ -29,7 +29,7 @@ export async function getSkillsByTitleAndCategory(categoryId: number | null, tit
   }
 }
 
-export async function getSkillById(id: number) {
+export async function getSkillById(id: number): Promise<Skills> {
   const response = await api.get(`/skill/${id}`);
   return response.data;
 }
