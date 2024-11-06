@@ -7,6 +7,7 @@ import { SignUp } from './pages/auth/sign-up'
 import { SkillDetail } from './pages/app/skillDetail'
 import { SkillManagement } from './pages/app/skillManagement'
 import { EditSkill } from './pages/app/editSkill'
+import { SkillQuestions } from './pages/app/skillQuestions'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
             element: <EditSkill />,
           },
           {
+            path: '/questoes/habilidade/:skillId',
+            element: <SkillQuestions />,
+          },
+          {
             path: '/gerenciar/conhecimento',
             element: <SkillManagement />,
           },
@@ -36,6 +41,7 @@ export const router = createBrowserRouter([
             path: '/gerenciar/questoes',
             element: <Home />,
           },
+          
 
         ],
       },
