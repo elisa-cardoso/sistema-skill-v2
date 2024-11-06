@@ -57,6 +57,7 @@ export function SkillDetail() {
       <div className="flex flex-col mt-4 w-4/5">
         <div className="flex justify-between w-full mt-8">
           <h1 className="text-4xl font-black">{skill.title}</h1>
+          <span className="sr-only">Iniciar teste de nivelamento.</span>
           <Button className="ml-4">Iniciar Teste</Button>
         </div>
         

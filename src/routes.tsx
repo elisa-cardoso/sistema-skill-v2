@@ -5,6 +5,8 @@ import { AppLayout } from './pages/_layout/app'
 import { AuthLayout } from './pages/_layout/auth'
 import { SignUp } from './pages/auth/sign-up'
 import { SkillDetail } from './pages/app/skillDetail'
+import { SkillManagement } from './pages/app/skillManagement'
+import { EditSkill } from './pages/app/editSkill'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -23,8 +25,12 @@ export const router = createBrowserRouter([
             element: <SkillDetail />,
           },
           {
+            path: '/habilidade/editar/:id',
+            element: <EditSkill />,
+          },
+          {
             path: '/gerenciar/conhecimento',
-            element: <Home />,
+            element: <SkillManagement />,
           },
           {
             path: '/gerenciar/questoes',

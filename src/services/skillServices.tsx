@@ -1,4 +1,4 @@
-import { Skills } from "@/@types/skills";
+import { Skills, UpdateSkillType } from "@/@types/skills";
 import { api } from "./api";
 import { getSkillsByCategory } from "./categoryServices";
 
@@ -32,4 +32,18 @@ export async function getSkillsByTitleAndCategory(categoryId: number | null, tit
 export async function getSkillById(id: number) {
   const response = await api.get(`/skill/${id}`);
   return response.data;
+}
+
+export async function deleteSkill(id: number): Promise<void> {
+  await api.delete(`/skill/${id}`);
+}
+
+export async function updateSkill(id: number, data: UpdateSkillType): Promise<void> {
+  try {
+    await api.put(`/skill/${id}`, data);
+    console.log("Skill atualizada com sucesso!");
+  } catch (error) {
+    console.error("Erro ao atualizar a habilidade:", error);
+    throw new Error("Erro ao atualizar a habilidade");
+  }
 }

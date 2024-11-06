@@ -92,10 +92,13 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
           <CardFooter className="flex space-x-2">
             <Link to={`/habilidade/${skill.id}`}>
               <Button variant="outline" className="flex-1">
+              <span className="sr-only">Visualizar habilidade.</span>
                 Saiba Mais
               </Button>
             </Link>
-            <Button className="flex-1">Iniciar Teste</Button>
+            <Button className="flex-1">
+            <span className="sr-only">Iniciar teste de nivelamento.</span>
+              Iniciar Teste</Button>
           </CardFooter>
         </Card>
       ))}
