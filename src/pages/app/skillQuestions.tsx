@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Question } from '@/@types/question';
-import { getQuestionsBySkillId, getValidAnswer } from '@/services/questionServices';
+import { getQuestionsBySkillId, getUserSkillLevel, getValidAnswer } from '@/services/questionServices';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 
@@ -13,6 +13,8 @@ export function SkillQuestions() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [feedback, setFeedback] = useState<string | null>(null);
+  const [userLevel, setUserLevel] = useState<number | null>(null);
+  const [userScore, setUserScore] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -30,33 +32,54 @@ export function SkillQuestions() {
     fetchQuestions();
   }, [skillId]);
 
+
   const validateAnswer = async () => {
     if (!selectedAnswer) {
       setFeedback("Selecione uma resposta.");
       return;
     }
-  
+
     try {
       const question = questions[currentQuestionIndex];
+      const response = await getValidAnswer(question.id, selectedAnswer);
 
-      console.log("Enviando para validação:", question.id, selectedAnswer);
+      if (response) {
+        const { correct, score, level } = response;
   
-      const isCorrect = await getValidAnswer(question.id, selectedAnswer);
-  
-      console.log('Resultado da validação:', isCorrect);
-  
-      if (isCorrect) {
-        setFeedback("Correto! Avançando para a próxima pergunta.");
-        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-        setSelectedAnswer(null);
+        if (correct) {
+          setFeedback("Correto! Avançando para a próxima pergunta.");
+          setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+          setSelectedAnswer(null);
+        } else {
+          setFeedback("Resposta incorreta. Tente novamente.");
+        }
+        setUserScore(score);
+        setUserLevel(level);
       } else {
-        setFeedback("Resposta incorreta. Tente novamente.");
+        setFeedback("Erro ao validar a resposta. Tente novamente.");
       }
+  
     } catch (error) {
       console.error('Erro ao validar a resposta:', error);
       setFeedback("Erro ao validar a resposta.");
     }
   };
+
+
+  useEffect(() => {
+    const fetchUserSkillLevel = async () => {
+      if (currentQuestionIndex >= questions.length) {
+        try {
+          const { level, score } = await getUserSkillLevel(Number(skillId));
+          setUserLevel(level);
+          setUserScore(score);
+        } catch (error) {
+          console.error("Erro ao obter nível do usuário:", error);
+        }
+      }
+    };
+    fetchUserSkillLevel();
+  }, [currentQuestionIndex, questions.length, skillId]);
 
   if (loading) return <div>Carregando...</div>;
   if (error) return <div>{error}</div>;
@@ -104,7 +127,11 @@ export function SkillQuestions() {
           {feedback && <p>{feedback}</p>}
         </div>
       ) : (
-        <p>Parabéns! Você completou todas as questões.</p>
+        <div>
+          <p>Parabéns! Você completou todas as questões.</p>
+          <p>Seu Nível: {userLevel}</p>
+          <p>Sua Pontuação: {userScore}</p>
+        </div>
       )}
     </div>
   );

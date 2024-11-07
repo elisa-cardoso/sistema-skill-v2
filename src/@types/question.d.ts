@@ -1,6 +1,6 @@
 import { Skills } from "./skills";
 
-interface Question {
+export interface Question {
   id: number;
   skill: Skills;
   questionText: string;
@@ -10,7 +10,8 @@ interface Question {
   optionD: string;
   correctOption: string;
 }
-interface ValidationResponse {
-  correctOption: boolean;
-  isCorrect: boolean;
+export interface ValidationResponse {
+  correct: boolean;
+  score: number;
+  level: number;
 }

@@ -1,5 +1,6 @@
 import { Question, ValidationResponse } from '@/@types/question';
 import { api } from './api';
+import { UserSkillLevelResponse } from '@/@types/userSkill';
 
 export const getQuestionsBySkillId = async (skillId: number): Promise<Question[]> => {
     try {
@@ -11,16 +12,28 @@ export const getQuestionsBySkillId = async (skillId: number): Promise<Question[]
     }
 };
 
-export const getValidAnswer = async (questionId: number, selectedAnswer: string): Promise<boolean> => {
+export const getValidAnswer = async (questionId: number, selectedAnswer: string): Promise<ValidationResponse | null> => {
   try {
     const response = await api.post<ValidationResponse>(`/questions/${questionId}/validate`, {
       answer: selectedAnswer,
     });
-    console.log('Resultado da validação:', response.data);
 
-    return response.data.isCorrect;
+    console.log('Resultado da validação:', response.data);
+    return response.data;
   } catch (error) {
+
     console.error('Erro na validação da resposta:', error);
-    return false;
+    return null;
+  }
+};
+
+export const getUserSkillLevel = async (skillId: number): Promise<UserSkillLevelResponse> => {
+  try {
+    const response = await api.get(`/questions/user-skill/${skillId}`);
+    console.log('Resposta do Backend:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao obter nível do usuário:", error);
+    throw new Error("Não foi possível obter o nível e a pontuação.");
   }
 };
