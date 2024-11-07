@@ -10,3 +10,7 @@ interface Question {
   optionD: string;
   correctOption: string;
 }
+interface ValidationResponse {
+  correctOption: boolean;
+  isCorrect: boolean;
+}

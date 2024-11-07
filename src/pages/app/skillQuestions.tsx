@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Question } from '@/@types/question';
-import { getQuestionsBySkillId } from '@/services/questionServices';
+import { getQuestionsBySkillId, getValidAnswer } from '@/services/questionServices';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 
 export function SkillQuestions() {
-  const { skillId } = useParams<{ skillId: string }>(); 
+  const { skillId } = useParams<{ skillId: string }>();
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       setLoading(true);
-      setError(null);
       try {
-        const data = await getQuestionsBySkillId(Number(skillId));
-
+        const data: Question[] = await getQuestionsBySkillId(Number(skillId));
         setQuestions(data);
       } catch (err) {
         setError('Erro ao carregar questões.');
@@ -27,25 +30,81 @@ export function SkillQuestions() {
     fetchQuestions();
   }, [skillId]);
 
-  if (loading) return <div>Loading...</div>;
+  const validateAnswer = async () => {
+    if (!selectedAnswer) {
+      setFeedback("Selecione uma resposta.");
+      return;
+    }
+  
+    try {
+      const question = questions[currentQuestionIndex];
+
+      console.log("Enviando para validação:", question.id, selectedAnswer);
+  
+      const isCorrect = await getValidAnswer(question.id, selectedAnswer);
+  
+      console.log('Resultado da validação:', isCorrect);
+  
+      if (isCorrect) {
+        setFeedback("Correto! Avançando para a próxima pergunta.");
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+        setSelectedAnswer(null);
+      } else {
+        setFeedback("Resposta incorreta. Tente novamente.");
+      }
+    } catch (error) {
+      console.error('Erro ao validar a resposta:', error);
+      setFeedback("Erro ao validar a resposta.");
+    }
+  };
+
+  if (loading) return <div>Carregando...</div>;
   if (error) return <div>{error}</div>;
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div>
-      {questions.length > 0 ? (
-        questions.map((question) => (
-          <div key={question.id}>
-            <p>{question.questionText}</p>
-            <ul>
-              <li>{question.optionA}</li>
-              <li>{question.optionB}</li>
-              <li>{question.optionC}</li>
-              <li>{question.optionD}</li>
-            </ul>
+      {currentQuestionIndex < questions.length ? (
+        <div key={currentQuestion.id}>
+          <p>{currentQuestion.questionText}</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Checkbox
+                checked={selectedAnswer === 'A'}
+                onCheckedChange={() => setSelectedAnswer('A')}
+              />
+              {currentQuestion.optionA}
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Checkbox
+                checked={selectedAnswer === 'B'}
+                onCheckedChange={() => setSelectedAnswer('B')}
+              />
+              {currentQuestion.optionB}
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Checkbox
+                checked={selectedAnswer === 'C'}
+                onCheckedChange={() => setSelectedAnswer('C')}
+              />
+              {currentQuestion.optionC}
+            </label>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <Checkbox
+                checked={selectedAnswer === 'D'}
+                onCheckedChange={() => setSelectedAnswer('D')}
+              />
+              {currentQuestion.optionD}
+            </label>
           </div>
-        ))
+          <Button onClick={validateAnswer} disabled={!selectedAnswer}>
+            Confirmar Resposta
+          </Button>
+          {feedback && <p>{feedback}</p>}
+        </div>
       ) : (
-        <p>Nenhuma questão encontrada para essa habilidade.</p>
+        <p>Parabéns! Você completou todas as questões.</p>
       )}
     </div>
   );
