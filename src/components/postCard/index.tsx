@@ -90,14 +90,14 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
             </CardDescription>
           </CardContent>
           <CardFooter className="flex space-x-2">
-            <Link to={`/habilidade/${skill.id}`}>
-              <Button variant="outline" className="flex-1">
+            <Link to={`/habilidade/${skill.id}`} className="flex-1">
+              <Button variant="outline" className="w-full">
                 <span className="sr-only">Visualizar habilidade.</span>
                 Saiba Mais
               </Button>
             </Link>
-            <Link to={`/questoes/habilidade/${skill.id}`}>
-              <Button className="flex-1">
+            <Link to={`/questoes/habilidade/${skill.id}`}  className="flex-1">
+              <Button className="w-full">
                 <span className="sr-only">Iniciar teste de nivelamento.</span>
                 Iniciar Teste
               </Button>

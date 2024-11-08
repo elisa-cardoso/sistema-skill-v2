@@ -10,6 +10,10 @@ export function Banner() {
         2000, 
         'Explore conhecimentos de Frontend',
         2000,
+        'Explore conhecimentos de Inteligência Artificial',
+        2000,
+        'Explore conhecimentos de Cybersecurity',
+        2000,
         'Explore conhecimentos de UX Design',
         2000
       ]}
