@@ -15,3 +15,13 @@ export interface ValidationResponse {
   score: number;
   level: number;
 }
+
+export interface NewQuestionData {
+  skillId: number;
+  questionText: string;
+  optionA: string;
+  optionB: string;
+  optionC: string;
+  optionD: string;
+  correctOption: string;
+}

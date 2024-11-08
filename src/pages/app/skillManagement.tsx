@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil, Plus, Search, Trash } from "lucide-react";
+import { Pencil, Plus, Search, Trash, Edit } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +84,7 @@ export function SkillManagement() {
                   <TableHead className="w-[250px]">Autor</TableHead>
                   <TableHead>Categorias</TableHead>
                   <TableHead className="w-[164px]"></TableHead>
+                  <TableHead className="w-[164px]"></TableHead>
                   <TableHead className="w-[132px]">
                   <Link to={`/habilidade/criar`}>
                     <Button size="xs">
@@ -129,6 +130,14 @@ export function SkillManagement() {
                       </Link>
                     </TableCell>
                     <TableCell>
+                      <Link to={`/gerenciar/questoes/${skill.id}`}>
+                        <Button variant="outline" size="xs">
+                          <Edit className="mr-2 h-3 w-3" />
+                          Questões
+                        </Button>
+                      </Link>
+                    </TableCell>
+                    <TableCell>
                       <Button
                         className="text-destructive color-destructive"
                         variant="ghost"
@@ -139,7 +148,7 @@ export function SkillManagement() {
                         <span className="sr-only">Deletar conhecimento.</span>
                         Deletar
                       </Button>
-                    </TableCell>
+                    </TableCell>   
                   </TableRow>
                 ))}
               </TableBody>

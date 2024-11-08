@@ -1,4 +1,4 @@
-import { Question, ValidationResponse } from '@/@types/question';
+import { NewQuestionData, Question, ValidationResponse } from '@/@types/question';
 import { api } from './api';
 import { UserSkillLevelResponse } from '@/@types/userSkill';
 
@@ -10,6 +10,11 @@ export const getQuestionsBySkillId = async (skillId: number): Promise<Question[]
         console.error('Erro ao buscar questões:', error);
         throw new Error('Erro ao buscar questões.');
     }
+};
+
+export const getQuestionById = async (questionId: number) => {
+  const response = await api.get(`/questions/list/${questionId}`);
+  return response.data
 };
 
 export const getValidAnswer = async (questionId: number, selectedAnswer: string): Promise<ValidationResponse | null> => {
@@ -37,3 +42,38 @@ export const getUserSkillLevel = async (skillId: number): Promise<UserSkillLevel
     throw new Error("Não foi possível obter o nível e a pontuação.");
   }
 };
+
+export const deleteQuestion = async (questionId: number): Promise<void> => {
+  try {
+    await api.delete(`/questions/${questionId}`);
+  } catch (error) {
+    console.error("Erro ao excluir a questão:", error);
+    throw new Error("Erro ao excluir a questão.");
+  }
+};
+
+export const updateQuestion = async (
+  questionId: number,
+  updatedData: Partial<Question>
+): Promise<Question> => {
+  try {
+    const response = await api.put(`/questions/${questionId}`, updatedData);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao editar a questão:", error);
+    throw new Error("Erro ao editar a questão.");
+  }
+};
+
+export async function createQuestion(skillId: number, newQuestionData: Omit<NewQuestionData, 'skillId'>): Promise<Question> {
+  try {
+    const response = await api.post<Question>(`/questions/${skillId}`, {
+      ...newQuestionData,
+      skillId
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao criar questão:', error);
+    throw new Error('Erro ao criar a questão.');
+  }
+}

@@ -9,6 +9,10 @@ import { SkillManagement } from './pages/app/skillManagement'
 import { EditSkill } from './pages/app/editSkill'
 import { SkillQuestions } from './pages/app/skillQuestions'
 import { CreateSkill } from './pages/app/createSkill'
+import { Pomodoro } from './pages/app/pomodoro'
+import { QuestionManagement } from './pages/app/questionManagement'
+import { EditQuestion } from './pages/app/editQuestion'
+import { CreateQuestion } from './pages/app/createQuestion'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -21,6 +25,10 @@ export const router = createBrowserRouter([
           {
             path: '/bibliteca',
             element: <Home />,
+          },
+          {
+            path: '/pomodoro',
+            element: <Pomodoro />,
           },
           {
             path: '/habilidade/:id',
@@ -43,11 +51,17 @@ export const router = createBrowserRouter([
             element: <SkillManagement />,
           },
           {
-            path: '/gerenciar/questoes',
-            element: <Home />,
+            path: '/gerenciar/questoes/:skillId',
+            element: <QuestionManagement />,
           },
-          
-
+          {
+            path: '/questoes/editar/:questionId',
+            element: <EditQuestion />,
+          },
+          {
+            path: '/questoes/criar/:skillId',
+            element: <CreateQuestion />,
+          }
         ],
       },
       {

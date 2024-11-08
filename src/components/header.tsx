@@ -29,8 +29,8 @@ export function Header() {
             Gerenciar conhecimento
           </NavLink>
           <Separator orientation="vertical" className="h-6" />
-          <NavLink to="/gerenciar/questoes">
-            Gerenciar questões
+          <NavLink to="/pomodoro">
+            Pomodoro
           </NavLink>
         </nav>
 
