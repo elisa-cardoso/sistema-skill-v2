@@ -15,7 +15,7 @@ export const customStyles = {
     }),
     menu: (provided: any) => {
       const { theme } = useTheme();
-      const backgroundColor = theme === 'dark' ? '#27272a' : '#ffffff'; // Verifique a propriedade correta
+      const backgroundColor = theme === 'dark' ? '#27272a' : '#ffffff'; 
       return {
         ...provided,
         backgroundColor: backgroundColor,
@@ -24,8 +24,7 @@ export const customStyles = {
     option: (provided: any, state: any) => ({
       ...provided,
       backgroundColor: state.isSelected ? '#2a9d8f !important' : state.isFocused ? '#2a9d8f !important' : null, // Cores de fundo de seleção e foco
-      color: state.isSelected ? 'black' : state.isFocused ? 'white' : null, // Cor do texto
-      padding: '10px',
+      color: state.isSelected ? 'black' : state.isFocused ? 'white' : null, 
       borderRadius: '4px',
       cursor: 'pointer',
     }),

@@ -8,6 +8,7 @@ import { SkillDetail } from './pages/app/skillDetail'
 import { SkillManagement } from './pages/app/skillManagement'
 import { EditSkill } from './pages/app/editSkill'
 import { SkillQuestions } from './pages/app/skillQuestions'
+import { CreateSkill } from './pages/app/createSkill'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
           {
             path: '/habilidade/editar/:id',
             element: <EditSkill />,
+          },
+          {
+            path: '/habilidade/criar',
+            element: <CreateSkill />,
           },
           {
             path: '/questoes/habilidade/:skillId',

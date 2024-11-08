@@ -1,4 +1,4 @@
-import { Skills, UpdateSkillType } from "@/@types/skills";
+import { CreateSkillType, Skills, UpdateSkillType } from "@/@types/skills";
 import { api } from "./api";
 import { getSkillsByCategory } from "./categoryServices";
 
@@ -47,3 +47,13 @@ export async function updateSkill(id: number, data: UpdateSkillType): Promise<vo
     throw new Error("Erro ao atualizar a habilidade");
   }
 }
+
+export const createSkill = async (data: CreateSkillType) => {
+  try {
+    const response = await api.post("/skill", data);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao criar skill:", error);
+    throw new Error("Erro ao criar skill");
+  }
+};

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil, Search, Trash } from "lucide-react";
+import { Pencil, Plus, Search, Trash } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +13,7 @@ import {
 import { deleteSkill, getSkills } from "@/services/skillServices";
 import { Skills } from "@/@types/skills";
 import { Link } from "react-router-dom";
-import { toast } from "sonner"; // Importa o toast
+import { toast } from "sonner"; 
 
 export function SkillManagement() {
   const [skills, setSkills] = useState<Skills[]>([]);
@@ -47,11 +47,11 @@ export function SkillManagement() {
         await deleteSkill(id);
         setSkills((prevSkills) =>
           prevSkills.filter((skill) => skill.id !== id)
-        ); // Atualiza o estado
-        toast.success("Habilidade excluída com sucesso!"); // Exibe o toast de sucesso
+        ); 
+        toast.success("Habilidade excluída com sucesso!"); 
       } catch (err) {
         setError("Erro ao excluir a habilidade.");
-        toast.error("Erro ao excluir a habilidade."); // Exibe o toast de erro
+        toast.error("Erro ao excluir a habilidade."); 
       }
     }
   };
@@ -84,7 +84,15 @@ export function SkillManagement() {
                   <TableHead className="w-[250px]">Autor</TableHead>
                   <TableHead>Categorias</TableHead>
                   <TableHead className="w-[164px]"></TableHead>
-                  <TableHead className="w-[132px]"></TableHead>
+                  <TableHead className="w-[132px]">
+                  <Link to={`/habilidade/criar`}>
+                    <Button size="xs">
+                      <Plus className="h-3 w-3" />
+                      <span className="sr-only">Adicionar conhecimento.</span>
+                      Adicionar
+                    </Button>
+                    </Link>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

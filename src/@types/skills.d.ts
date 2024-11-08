@@ -15,3 +15,10 @@ export interface UpdateSkillType {
   image: string;
   category: number[]; 
 }
+
+export interface CreateSkillType {
+  title: string;        
+  description: string;  
+  image: string;        
+  category: number[];   
+}
