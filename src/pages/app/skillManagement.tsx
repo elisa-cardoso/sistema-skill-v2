@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pencil, Plus, Search, Trash, Edit } from "lucide-react";
+import { Pencil, Plus, Search, Trash, Edit, NotebookText } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,7 +73,7 @@ export function SkillManagement() {
         </h1>
         <p>Ajude a manter os conhecimentos sempre atualizados e didáticos!</p>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mb-8">
         <div className="w-2/3">
           <div className="rounded-md border">
             <Table>
@@ -81,7 +81,6 @@ export function SkillManagement() {
                 <TableRow>
                   <TableHead className="w-[64px]"></TableHead>
                   <TableHead className="w-[250px]">Título</TableHead>
-                  <TableHead className="w-[250px]">Autor</TableHead>
                   <TableHead>Categorias</TableHead>
                   <TableHead className="w-[164px]"></TableHead>
                   <TableHead className="w-[164px]"></TableHead>
@@ -110,7 +109,6 @@ export function SkillManagement() {
                       </Link>
                     </TableCell>
                     <TableCell className="font-medium">{skill.title}</TableCell>
-                    <TableCell className="font-medium">Autor</TableCell>
                     <TableCell className="font-medium">
                       {skill.category.map((category) => (
                         <span
@@ -132,7 +130,7 @@ export function SkillManagement() {
                     <TableCell>
                       <Link to={`/gerenciar/questoes/${skill.id}`}>
                         <Button variant="outline" size="xs">
-                          <Edit className="mr-2 h-3 w-3" />
+                          <NotebookText className="mr-2 h-3 w-3" />
                           Questões
                         </Button>
                       </Link>

@@ -85,7 +85,7 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
                 </span>
               ))}
             </div>
-            <CardDescription className="description-clamp mt-4">
+            <CardDescription className=" text-clamp mt-4">
               {skill.description}
             </CardDescription>
           </CardContent>

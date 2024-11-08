@@ -13,6 +13,7 @@ import { Pomodoro } from './pages/app/pomodoro'
 import { QuestionManagement } from './pages/app/questionManagement'
 import { EditQuestion } from './pages/app/editQuestion'
 import { CreateQuestion } from './pages/app/createQuestion'
+import { Library } from './pages/app/library'
 export const router = createBrowserRouter([
     {
         path: '/',
@@ -23,8 +24,8 @@ export const router = createBrowserRouter([
             element: <Home />,
           },
           {
-            path: '/bibliteca',
-            element: <Home />,
+            path: '/biblioteca',
+            element: <Library />,
           },
           {
             path: '/pomodoro',

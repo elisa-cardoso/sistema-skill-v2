@@ -1,8 +1,20 @@
+.description-clamp {
+   display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  max-width: 200px;
+}
+.table-cell {
+  height: auto; 
+  min-height: 3rem;
+  max-width: 200px;
+  text-overflow: ellipsis;
+}
 .text-clamp {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limita a 2 linhas */
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; 
   overflow: hidden;
-  text-overflow: ellipsis; /* Adiciona reticências no final */
-  white-space: normal; /* Permite que o texto quebre em múltiplas linhas */
-  }
+  text-overflow: ellipsis;
+}

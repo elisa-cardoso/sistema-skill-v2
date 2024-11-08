@@ -72,7 +72,7 @@ export function QuestionManagement() {
         <h1 className="text-3xl font-bold tracking-tight">Edição de Questões</h1>
         <p>Gerencie e edite as questões para essa habilidade específica.</p>
       </div>
-      <div className="flex justify-center">
+      <div className="flex mb-8 justify-center">
         <div className="w-full">
           <div className="rounded-md border">
             <Table>
