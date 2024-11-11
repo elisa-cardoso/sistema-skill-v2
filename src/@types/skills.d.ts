@@ -22,3 +22,11 @@ export interface CreateSkillType {
   image: string;        
   category: number[];   
 }
+
+export interface PaginatedSkills {
+  content: Skills[]; 
+  totalElements: number; 
+  totalPages: number;
+  pageNumber: number;
+  pageSize: number; 
+}

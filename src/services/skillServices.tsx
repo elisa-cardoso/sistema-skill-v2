@@ -1,7 +1,5 @@
-import { CreateSkillType, Skills, UpdateSkillType } from "@/@types/skills";
+import { CreateSkillType, PaginatedSkills, Skills, UpdateSkillType } from "@/@types/skills";
 import { api } from "./api";
-import { getSkillsByCategory } from "./categoryServices";
-
 
 export async function getSkills(): Promise<Skills[]> {
   const response = await api.get<Skills[]>("/skill");
@@ -14,18 +12,31 @@ export async function getSkillsByTitle(title: string): Promise<Skills[]> {
 }
 
 // melhorar no back
-export async function getSkillsByTitleAndCategory(categoryId: number | null, title: string | null): Promise<Skills[]> {
-  if (categoryId && title) {
-    const skillsByCategory = await getSkillsByCategory(categoryId);
-    return skillsByCategory.filter((skill) =>
-      skill.title.toLowerCase().includes(title.toLowerCase())
-    );
-  } else if (categoryId) {
-    return getSkillsByCategory(categoryId);
-  } else if (title) {
-    return getSkillsByTitle(title);
-  } else {
-    return getSkills();
+export async function getSkillsByTitleAndCategory(
+  categoryId: number | null,
+  title: string | null,
+  page: number = 0, 
+  size: number = 10
+): Promise<PaginatedSkills> {
+  const params: URLSearchParams = new URLSearchParams();
+
+  if (categoryId) {
+    params.append("categoryId", categoryId.toString());
+  }
+
+  if (title) {
+    params.append("title", title);
+  }
+
+  params.append("page", page.toString());
+  params.append("size", size.toString());
+
+  try {
+    const response = await api.get("/skill/search", { params });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar habilidades:", error);
+    throw error;
   }
 }
 
