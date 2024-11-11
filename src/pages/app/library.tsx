@@ -9,9 +9,13 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { UserSkill } from "@/@types/userSkill";
-import { getAssociation, deleteAssociation } from "@/services/userSkillServices";
-import { FaStar, FaRegStar } from "react-icons/fa";
-import "../stylesLineTable.css";
+import {
+  getAssociation,
+  deleteAssociation,
+  toggleFavorite,
+} from "@/services/userSkillServices";
+import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 export function Library() {
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
@@ -63,9 +67,20 @@ export function Library() {
     }
   };
 
-  if (loading) {
-    return <p>Carregando habilidades...</p>;
-  }
+  const handleFavoriteToggle = async (userSkillId: number) => {
+    try {
+      const updatedSkill: UserSkill = await toggleFavorite(userSkillId);
+      setUserSkills((prevSkills) =>
+        prevSkills.map((skill) =>
+          skill.id === userSkillId
+            ? { ...skill, favorite: updatedSkill.favorite }
+            : skill
+        )
+      );
+    } catch (error) {
+      setError("Erro ao favoritar/desfavoritar a habilidade.");
+    }
+  };
 
   if (error) {
     return <p className="text-center text-destructive">{error}</p>;
@@ -77,18 +92,36 @@ export function Library() {
         <h1 className="text-3xl font-bold tracking-tight">Minha biblioteca</h1>
         <p>Gerencie os conhecimentos da sua estante virtual!</p>
       </div>
-      {userSkills.length === 0 ? (
+
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <ClipLoader color="var(--primary)" loading={loading} size={50} />
+        </div>
+      ) : userSkills.length === 0 ? (
         <p className="text-center">Nenhuma habilidade associada ao usuário.</p>
       ) : (
-        userSkills.map((userSkill) => (
-          <div className="flex flex-wrap justify-center gap-4" key={userSkill.id}>
-            <Card className="w-80 bg-transparent shadow-md">
-              <CardHeader>
+        <div className="flex flex-wrap justify-center gap-4 mt-14">
+          {userSkills.map((userSkill) => (
+            <Card
+              key={userSkill.id}
+              className="w-80 bg-transparent shadow-md flex flex-col"
+            >
+              <CardHeader className="relative">
                 <img
                   src={userSkill.image}
                   alt={userSkill.skillName}
                   className="w-full h-48 object-cover rounded-lg"
                 />
+                <button
+                  className="absolute top-2 right-2 text-2xl"
+                  onClick={() => handleFavoriteToggle(userSkill.id)}
+                >
+                  {userSkill.favorite ? (
+                    <FaHeart className="text-red-500" />
+                  ) : (
+                    <FaRegHeart className="text-gray-500" />
+                  )}
+                </button>
               </CardHeader>
               <CardContent>
                 <CardTitle>{userSkill.skillName}</CardTitle>
@@ -98,12 +131,10 @@ export function Library() {
                       {renderStars(userSkill.level)}
                     </div>
                   </div>
-
-                  <p className="w-full mt-2 text-clamp">{userSkill.description}</p>
+                  <p className="text-clamp mt-2">{userSkill.description}</p>
                 </CardDescription>
               </CardContent>
-              <CardFooter className="flex-1 space-x-2">
-            
+              <CardFooter className="flex space-x-2">
                 <Button
                   variant="destructive"
                   onClick={() => handleDelete(userSkill.id)}
@@ -113,8 +144,8 @@ export function Library() {
                 </Button>
               </CardFooter>
             </Card>
-          </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

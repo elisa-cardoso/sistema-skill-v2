@@ -105,7 +105,7 @@ export function QuestionManagement() {
                     <TableCell className="line-clamp-2 table-cell">{question.optionC}</TableCell>
                     <TableCell className="line-clamp-2 table-cell">{question.optionD}</TableCell>
                     <TableCell className="line-clamp-2 table-cell font-bold">{question.correctOption}</TableCell>
-                    <TableCell className="flex gap-2">
+                    <TableCell>
                       <Link to={`/questoes/editar/${question.id}`}>
                         <Button variant="outline" size="xs">
                           <Pencil className="mr-2 h-3 w-3" />

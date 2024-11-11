@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Skills } from "@/@types/skills";
 import { ClipLoader } from "react-spinners";
 import { getSkillById } from "@/services/skillServices";
@@ -48,35 +48,38 @@ export function SkillDetail() {
 
   return (
     <div className="flex justify-center min-h-screen">
-    <div className="w-2/3 flex flex-col items-center">
-      <img
-        className="w-full h-80 object-cover rounded-lg mt-4"
-        alt={skill.title}
-        src={skill.image}
-      />
-      <div className="flex flex-col mt-4 w-4/5">
-        <div className="flex justify-between w-full mt-8">
-          <h1 className="text-4xl font-black">{skill.title}</h1>
-          <span className="sr-only">Iniciar teste de nivelamento.</span>
-          <Button className="ml-4">Iniciar Teste</Button>
-        </div>
-        
-        <div className="flex justify-start gap-2 mt-2">
-          {skill.category.map((category) => (
-            <span
-              key={category.id}
-              className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs"
-            >
-              {category.name}
-            </span>
-          ))}
-        </div>
-  
-        <div className="mt-10 w-full">
-          <MarkdownRenderer content={skill.description} />
+      <div className="w-2/3 flex flex-col items-center">
+        <img
+          className="w-full h-80 object-cover rounded-lg mt-4"
+          alt={skill.title}
+          src={skill.image}
+        />
+        <div className="flex flex-col mt-4 w-4/5">
+          <div className="flex justify-between w-full mt-8">
+            <h1 className="text-4xl font-black">{skill.title}</h1>
+            <Link to={`/questoes/habilidade/${skill.id}`}>
+              <Button className="ml-4">
+              <span className="sr-only">Iniciar teste de nivelamento.</span>
+                Iniciar Teste</Button>
+            </Link>
+          </div>
+
+          <div className="flex justify-start gap-2 mt-2">
+            {skill.category.map((category) => (
+              <span
+                key={category.id}
+                className="bg-secondary text-secondary-foreground px-2 py-1 rounded-full text-xs"
+              >
+                {category.name}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-10 w-full">
+            <MarkdownRenderer content={skill.description} />
+          </div>
         </div>
       </div>
     </div>
-  </div>
   );
 }

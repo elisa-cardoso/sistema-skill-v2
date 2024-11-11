@@ -9,4 +9,5 @@ export interface UserSkillLevelResponse {
     score: number;
     image: string;
     description: string;
+    favorite: boolean;
   }

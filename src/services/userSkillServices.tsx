@@ -17,3 +17,8 @@ export const getAssociation = async (): Promise<UserSkill[]> => {
       throw new Error(error instanceof Error ? error.message : "Erro desconhecido");
     }
   };
+
+  export async function toggleFavorite(id: number): Promise<UserSkill> {
+    const response = await api.patch(`/user_skills/toggle/${id}`);
+    return response.data as UserSkill;
+  }
