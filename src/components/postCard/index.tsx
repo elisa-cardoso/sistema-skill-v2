@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { getSkillsByTitleAndCategory } from "@/services/skillServices";
 import { Skills } from "@/@types/skills";
 import { ClipLoader } from "react-spinners";
@@ -11,10 +11,9 @@ import {
   CardFooter,
 } from "../ui/card";
 import { Button } from "../ui/button";
-
-import "./styles.css";
 import { Link } from "react-router-dom";
 import { Pagination } from "../pagination";
+import { debounce } from "lodash";
 
 interface PostCardProps {
   selectedCategory: number | null;
@@ -25,36 +24,37 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
   const [skills, setSkills] = useState<Skills[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [pageIndex, setPageIndex] = useState<number>(0); 
+  const [pageIndex, setPageIndex] = useState<number>(0);
   const [totalCount, setTotalCount] = useState<number>(0);
-  const [perPage] = useState<number>(10); 
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [perPage] = useState<number>(10);
 
-  useEffect(() => {
-    async function fetchSkills() {
+  const fetchSkills = useCallback(
+    debounce(async (categoryId: number | null, title: string, page: number, size: number) => {
       setLoading(true);
       setError(null);
-
       try {
-        const data = await getSkillsByTitleAndCategory(
-          selectedCategory,
-          searchTitle,
-          pageIndex,
-          perPage
-        );
-        setSkills(data.content);
+        const data = await getSkillsByTitleAndCategory(categoryId, title, page, size);
+        setSkills(data.skills);
         setTotalCount(data.totalElements);
+        setTotalPages(data.totalPages);
       } catch (err) {
         setError("Erro ao carregar conhecimentos.");
       } finally {
         setLoading(false);
       }
-    }
+    }, 500), []);
 
-    fetchSkills();
-  }, [selectedCategory, searchTitle,pageIndex]);
+  useEffect(() => {
+    fetchSkills(selectedCategory, searchTitle, pageIndex, perPage);
+
+    return () => {
+      fetchSkills.cancel();
+    };
+  }, [selectedCategory, searchTitle, pageIndex, perPage, fetchSkills]);
 
   const handlePageChange = (newPageIndex: number) => {
-    setPageIndex(newPageIndex); 
+    setPageIndex(newPageIndex);
   };
 
   if (loading) {
@@ -62,14 +62,6 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
       <div className="flex justify-center items-center h-full">
         <ClipLoader color="var(--primary)" loading={loading} size={50} />
       </div>
-    );
-  }
-
-  if (skills.length === 0) {
-    return (
-      <p className="text-center">
-        Nenhum conhecimento encontrado para esta categoria.
-      </p>
     );
   }
 
@@ -108,7 +100,7 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
                   Saiba Mais
                 </Button>
               </Link>
-              <Link to={`/questoes/habilidade/${skill.id}`}  className="flex-1">
+              <Link to={`/questoes/habilidade/${skill.id}`} className="flex-1">
                 <Button className="w-full">
                   <span className="sr-only">Iniciar teste de nivelamento.</span>
                   Iniciar Teste
@@ -123,6 +115,7 @@ export function PostCard({ selectedCategory, searchTitle }: PostCardProps) {
         pageIndex={pageIndex}
         totalCount={totalCount}
         perPage={perPage}
+        totalPages={totalPages}
         onPageChange={handlePageChange}
       />
     </div>

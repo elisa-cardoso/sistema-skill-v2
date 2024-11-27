@@ -13,12 +13,12 @@ interface CategoryFilterProps {
 
 export function CategoryFilter({ onSelectCategory }: CategoryFilterProps) {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
-  const [categories, setCategories] = useState<Category[] | null>(null); 
+  const [categories, setCategories] = useState<Category[]>([]); 
 
   useEffect(() => {
     getCategories()
-      .then((data) => setCategories(data)) 
-      .catch(() => setCategories([])); 
+      .then((data) => setCategories(data || [])) 
+      .catch(() => setCategories([]));
   }, []);
 
   const handleCategorySelect = (categoryId: number) => {
@@ -32,7 +32,7 @@ export function CategoryFilter({ onSelectCategory }: CategoryFilterProps) {
   };
 
   
-  if (categories === null) return <p className="text-center">Carregando categorias...</p>;
+  if (!categories.length) return <p className="text-center">Carregando categorias...</p>;
   
   return (
     <div className="flex flex-wrap justify-center gap-2 p-4">

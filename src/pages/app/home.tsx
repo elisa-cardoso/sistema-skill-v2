@@ -4,6 +4,7 @@ import { PostCard } from "@/components/postCard";
 import { Search } from "@/components/search";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+
 export function Home() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchTitle, setSearchTitle] = useState<string>("");

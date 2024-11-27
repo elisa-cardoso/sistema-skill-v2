@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        favorite: "bg-background",
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         defaultBlack: "bg-black text-primary-foreground hover:bg-black/90",
         blue: "bg-secondary text-secondary-foreground hover:bg-chart-2/90 hover:text-white",

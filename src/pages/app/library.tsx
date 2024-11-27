@@ -112,8 +112,8 @@ export function Library() {
                   alt={userSkill.skillName}
                   className="w-full h-48 object-cover rounded-lg"
                 />
-                <button
-                  className="absolute top-2 right-2 text-2xl"
+                <Button variant='favorite'
+                  className="absolute top-2 right-2 rounded-full w-12 h-12"
                   onClick={() => handleFavoriteToggle(userSkill.id)}
                 >
                   {userSkill.favorite ? (
@@ -121,7 +121,7 @@ export function Library() {
                   ) : (
                     <FaRegHeart className="text-gray-500" />
                   )}
-                </button>
+                </Button>
               </CardHeader>
               <CardContent>
                 <CardTitle>{userSkill.skillName}</CardTitle>

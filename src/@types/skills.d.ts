@@ -24,9 +24,9 @@ export interface CreateSkillType {
 }
 
 export interface PaginatedSkills {
-  content: Skills[]; 
+  skills: Skills[]; 
   totalElements: number; 
   totalPages: number;
-  pageNumber: number;
-  pageSize: number; 
+  page: number;
+  size: number; 
 }

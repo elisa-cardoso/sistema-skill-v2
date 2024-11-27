@@ -11,33 +11,21 @@ export async function getSkillsByTitle(title: string): Promise<Skills[]> {
   return response.data;
 }
 
-// melhorar no back
 export async function getSkillsByTitleAndCategory(
   categoryId: number | null,
   title: string | null,
   page: number = 0, 
   size: number = 10
 ): Promise<PaginatedSkills> {
-  const params: URLSearchParams = new URLSearchParams();
-
-  if (categoryId) {
-    params.append("categoryId", categoryId.toString());
-  }
-
-  if (title) {
-    params.append("title", title);
-  }
-
-  params.append("page", page.toString());
-  params.append("size", size.toString());
-
-  try {
-    const response = await api.get("/skill/search", { params });
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar habilidades:", error);
-    throw error;
-  }
+  const response = await api.get(`/skill/search`, {
+    params: {
+      title,
+      categoryId,
+      page,
+      size,
+    }
+  });
+  return response.data;
 }
 
 export async function getSkillById(id: number): Promise<Skills> {

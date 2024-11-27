@@ -113,7 +113,7 @@ export function SignUp() {
                   onClick={togglePasswordVisible}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
                 >
-                  {isPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {isPasswordVisible ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
               {errors.password && <p className="text-sm text-destructive">{errors.password.message}</p>}
@@ -133,7 +133,7 @@ export function SignUp() {
                   onClick={toggleConfirmPasswordVisible}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
                 >
-                  {isConfirmPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                  {isConfirmPasswordVisible ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
               {errors.confirmPassword && <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>}
