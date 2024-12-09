@@ -9,7 +9,7 @@ import { getQuestionById, updateQuestion } from "@/services/questionServices";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";  // Importando o Select do ShadCN UI
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const questionSchema = z.object({
   questionText: z.string().min(5, "Texto da questão deve ter no mínimo 5 caracteres"),

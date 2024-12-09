@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { z } from "zod";
@@ -9,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "@/services/userServices";
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const signInForm = z.object({
   login: z.string().email(),
@@ -29,22 +30,26 @@ export function SignIn() {
     resolver: zodResolver(signInForm),
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
 
   useEffect(() => {
     const savedLogin = localStorage.getItem("login");
     if (savedLogin) {
       setValue("login", savedLogin);
+      setRememberMe(true);
     }
   }, [setValue]);
 
   async function handleSignIn(data: SignInForm) {
-    console.log(data);
     try {
       const response = await login(data.login, data.password);
-      
       if (response.token) {
         localStorage.setItem("token", response.token);
-        console.log("Token armazenado:", response.token); 
+      }
+      if (rememberMe) {
+        localStorage.setItem("login", data.login);
+      } else {
+        localStorage.removeItem("login");
       }
       toast.success("Login realizado com sucesso!");
       navigate("/");
@@ -55,6 +60,16 @@ export function SignIn() {
 
   const togglePasswordVisible = () => {
     setIsPasswordVisible((prev) => !prev);
+  };
+
+  const handleRememberMeChange = () => {
+    setRememberMe((prev) => {
+      const newValue = !prev;
+      if (!newValue) {
+        localStorage.removeItem("login");
+      }
+      return newValue;
+    });
   };
 
   return (
@@ -95,6 +110,14 @@ export function SignIn() {
                   {isPasswordVisible ? <Eye size={20} /> : <EyeOff size={20} />}
                 </button>
               </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="rememberMe"
+                checked={rememberMe}
+                onCheckedChange={handleRememberMeChange}
+              />
+              <Label htmlFor="rememberMe">Lembre-se de mim</Label>
             </div>
             <Button className="w-full" type="submit" disabled={isSubmitting}>
               Acessar painel

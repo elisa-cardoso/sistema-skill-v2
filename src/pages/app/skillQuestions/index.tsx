@@ -157,7 +157,7 @@ export function SkillQuestions() {
             <p> Você completou todas as questões.</p>
           </CardHeader>
           <CardContent className='mb-14'>
-            <p className='font-bold text-lg'>Sua nova Pontuação: {userScore}</p>
+            <p className='font-bold text-lg'>Seu nível nessa habilidade é: {userScore} de 5</p>
           </CardContent>
         </Card>
       )}

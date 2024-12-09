@@ -9,10 +9,10 @@ export function Search({ onSearch }: SearchProps) {
   };
 
   return (
-    <div className="mb-4 flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <Input 
         placeholder="Busque um conhecimento..." 
-        className="h-8 w-2/4" 
+         
         onChange={handleInputChange} 
       />
     </div>

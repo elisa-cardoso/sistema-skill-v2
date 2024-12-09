@@ -2,11 +2,11 @@ import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-r
 import { Button } from './ui/button';
 
 interface PaginationProps {
-  pageIndex: number;
-  totalCount: number;
-  totalPages: number; 
-  perPage: number;
-  onPageChange: (newPageIndex: number) => void;
+  pageIndex: number;  // A página atual (baseada em 1)
+  totalCount: number;  // Total de itens
+  totalPages: number;  // Total de páginas
+  perPage: number;     // Itens por página
+  onPageChange: (newPageIndex: number) => void;  // Função para alterar a página
 }
 
 export function Pagination({
@@ -16,10 +16,19 @@ export function Pagination({
   perPage,
   onPageChange,
 }: PaginationProps) {
-  const handleFirstPage = () => onPageChange(0);
-  const handlePreviousPage = () => onPageChange(pageIndex - 1); 
-  const handleNextPage = () => onPageChange(pageIndex + 1); 
-  const handleLastPage = () => onPageChange(totalPages - 1);
+
+  const handleFirstPage = () => onPageChange(1);  
+  const handlePreviousPage = () => {
+    if (pageIndex > 1) { 
+      onPageChange(pageIndex - 1);
+    }
+  };
+  const handleNextPage = () => {
+    if (pageIndex < totalPages) { 
+      onPageChange(pageIndex + 1);
+    }
+  };
+  const handleLastPage = () => onPageChange(totalPages); 
 
   return (
     <div className="flex items-center justify-center px-40 py-10 w-full">
@@ -30,14 +39,14 @@ export function Pagination({
 
         <div className="flex items-center gap-6 lg:gap-8">
           <div className="text-sm font-medium">
-            Página {pageIndex + 1} de {totalPages} 
+            Página {pageIndex} de {totalPages}
           </div>
           <div className="flex items-center gap-2">
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={handleFirstPage}
-              disabled={pageIndex === 0}
+              disabled={pageIndex === 1}  
             >
               <ChevronsLeft className="h-4 w-4" />
               <span className="sr-only">Primeira página</span>
@@ -47,7 +56,7 @@ export function Pagination({
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={handlePreviousPage}
-              disabled={pageIndex === 0}
+              disabled={pageIndex === 1}  
             >
               <ChevronLeft className="h-4 w-4" />
               <span className="sr-only">Página anterior</span>
@@ -57,7 +66,7 @@ export function Pagination({
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={handleNextPage}
-              disabled={pageIndex === totalPages - 1}
+              disabled={pageIndex === totalPages} 
             >
               <ChevronRight className="h-4 w-4" />
               <span className="sr-only">Próxima página</span>
@@ -67,7 +76,7 @@ export function Pagination({
               variant="outline"
               className="h-8 w-8 p-0"
               onClick={handleLastPage}
-              disabled={pageIndex === totalPages - 1}
+              disabled={pageIndex === totalPages}  
             >
               <ChevronsRight className="h-4 w-4" />
               <span className="sr-only">Última página</span>

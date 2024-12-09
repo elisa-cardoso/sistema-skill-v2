@@ -1,4 +1,9 @@
-import { CreateSkillType, PaginatedSkills, Skills, UpdateSkillType } from "@/@types/skills";
+import {
+  CreateSkillType,
+  PaginatedSkills,
+  Skills,
+  UpdateSkillType,
+} from "@/@types/skills";
 import { api } from "./api";
 
 export async function getSkills(): Promise<Skills[]> {
@@ -14,8 +19,9 @@ export async function getSkillsByTitle(title: string): Promise<Skills[]> {
 export async function getSkillsByTitleAndCategory(
   categoryId: number | null,
   title: string | null,
-  page: number = 0, 
-  size: number = 10
+  page: number = 1,
+  size: number = 10,
+  sortDirection: string = "ASC"
 ): Promise<PaginatedSkills> {
   const response = await api.get(`/skill/search`, {
     params: {
@@ -23,7 +29,8 @@ export async function getSkillsByTitleAndCategory(
       categoryId,
       page,
       size,
-    }
+      sortDirection,
+    },
   });
   return response.data;
 }
@@ -37,7 +44,10 @@ export async function deleteSkill(id: number): Promise<void> {
   await api.delete(`/skill/${id}`);
 }
 
-export async function updateSkill(id: number, data: UpdateSkillType): Promise<void> {
+export async function updateSkill(
+  id: number,
+  data: UpdateSkillType
+): Promise<void> {
   try {
     await api.put(`/skill/${id}`, data);
     console.log("Skill atualizada com sucesso!");

@@ -21,7 +21,7 @@ export function Banner() {
       speed={10}
       style={{ fontSize: '2rem', fontFamily: 'Lato', fontWeight: 400, marginTop: 20, marginBottom: 20}}
       repeat={Infinity}
-      className='text-primary'
+      className='text-foreground'
     />
     </div>
   );

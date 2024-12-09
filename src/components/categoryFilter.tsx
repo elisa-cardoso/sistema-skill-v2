@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { getCategories } from "@/services/categoryServices";
+import { Skeleton } from "@/components/ui/skeleton"; 
 
 interface Category {
   id: number;
@@ -31,9 +32,16 @@ export function CategoryFilter({ onSelectCategory }: CategoryFilterProps) {
     }
   };
 
-  
-  if (!categories.length) return <p className="text-center">Carregando categorias...</p>;
-  
+  if (!categories.length) {
+    return (
+      <div className="flex flex-wrap justify-center gap-2 p-4">
+        <Skeleton className="h-10 w-20 mb-2 rounded-md" />
+        <Skeleton className="h-10 w-20 mb-2 rounded-md" />
+        <Skeleton className="h-10 w-20 mb-2 rounded-md" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-wrap justify-center gap-2 p-4">
       {categories.map((category) => (

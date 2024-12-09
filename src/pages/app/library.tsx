@@ -8,19 +8,66 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { UserSkill } from "@/@types/userSkill";
 import {
   getAssociation,
   deleteAssociation,
   toggleFavorite,
+  updateSkillDifficulty,
 } from "@/services/userSkillServices";
 import { FaStar, FaRegStar, FaHeart, FaRegHeart } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
+import {
+  CheckCircle,
+  ChevronDown,
+  Frown,
+  Meh,
+  Smile,
+  Trash,
+} from "lucide-react";
+import { toast } from "sonner";
+import { DrowerLibrary } from "@/components/drawerLibrary";
+
+const DIFFICULTY_OPTIONS = [
+  {
+    label: "Dominado",
+    value: "dominado",
+    icon: <CheckCircle />,
+    color: "#36a49f",
+  },
+  {
+    label: "Fácil",
+    value: "fácil",
+    icon: <Smile />,
+    color: "#34d399",
+  },
+  {
+    label: "Médio",
+    value: "médio",
+    icon: <Meh />,
+    color: "#fb923c",
+  },
+  {
+    label: "Difícil",
+    value: "difícil",
+    icon: <Frown />,
+    color: "#ef4444",
+  },
+];
 
 export function Library() {
   const [userSkills, setUserSkills] = useState<UserSkill[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedDifficulties, setSelectedDifficulties] = useState<{
+    [key: number]: string;
+  }>({});
 
   useEffect(() => {
     const getUserSkills = async () => {
@@ -62,8 +109,10 @@ export function Library() {
       setUserSkills((prevSkills) =>
         prevSkills.filter((skill) => skill.id !== id)
       );
+      toast.success("Habilidade excluída com sucesso!");
     } catch (error) {
       setError("Erro ao excluir a habilidade.");
+      toast.error("Erro ao excluir a habilidade.");
     }
   };
 
@@ -77,20 +126,69 @@ export function Library() {
             : skill
         )
       );
+      const action = updatedSkill.favorite ? "favoritada" : "desfavoritada";
+      toast.success(`Habilidade ${action}!`);
     } catch (error) {
       setError("Erro ao favoritar/desfavoritar a habilidade.");
+      toast.error("Erro ao favoritar/desfavoritar a habilidade.");
     }
   };
 
-  if (error) {
-    return <p className="text-center text-destructive">{error}</p>;
-  }
+  const handleUpdateDifficultyRating = async (
+    skillId: number,
+    difficultyRating: string
+  ) => {
+    try {
+      const updatedSkill: UserSkill = await updateSkillDifficulty(
+        skillId,
+        difficultyRating
+      );
+      console.log("Habilidade atualizada com sucesso:", updatedSkill);
+      setUserSkills((prevSkills) =>
+        prevSkills.map((skill) =>
+          skill.skillId === skillId
+            ? { ...skill, difficultyRating: updatedSkill.difficultyRating }
+            : skill
+        )
+      );
+      setSelectedDifficulties((prev) => ({
+        ...prev,
+        [skillId]: difficultyRating,
+      }));
+      toast.success("Dificuldade atualizada com sucesso!");
+    } catch (error) {
+      setError("Erro ao atualizar a dificuldade da habilidade.");
+      toast.error("Erro ao atualizar a dificuldade da habilidade.");
+    }
+  };
+  const fetchUserSkills = async () => {
+    try {
+      const data = await getAssociation();
+      setUserSkills(data);
+    } catch (err) {
+      console.error("Erro ao carregar as habilidades.", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserSkills();
+  }, []);
+
+  const handleAssociationCreated = () => {
+    fetchUserSkills();
+  };
 
   return (
     <div>
       <div className="flex flex-col gap-2 my-8 text-center">
         <h1 className="text-3xl font-bold tracking-tight">Minha biblioteca</h1>
         <p>Gerencie os conhecimentos da sua estante virtual!</p>
+      </div>
+      <div className="my-8 text-center">
+        <Button>
+        <DrowerLibrary onAssociationCreated={handleAssociationCreated} />
+        </Button>
+
       </div>
 
       {loading ? (
@@ -112,7 +210,8 @@ export function Library() {
                   alt={userSkill.skillName}
                   className="w-full h-48 object-cover rounded-lg"
                 />
-                <Button variant='favorite'
+                <Button
+                  variant="favorite"
                   className="absolute top-2 right-2 rounded-full w-12 h-12"
                   onClick={() => handleFavoriteToggle(userSkill.id)}
                 >
@@ -131,7 +230,7 @@ export function Library() {
                       {renderStars(userSkill.level)}
                     </div>
                   </div>
-                  <p className="text-clamp mt-2">{userSkill.description}</p>
+                  <div className="text-clamp mt-2">{userSkill.description}</div>
                 </CardDescription>
               </CardContent>
               <CardFooter className="flex space-x-2">
@@ -139,9 +238,64 @@ export function Library() {
                   variant="destructive"
                   onClick={() => handleDelete(userSkill.id)}
                 >
-                  <span className="sr-only">Excluir habilidade.</span>
-                  Excluir Associação
+                  <Trash />
+                  Deletar
                 </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      style={{
+                        color: selectedDifficulties[userSkill.skillId]
+                          ? DIFFICULTY_OPTIONS.find(
+                              (option) =>
+                                option.value ===
+                                selectedDifficulties[userSkill.skillId]
+                            )?.color
+                          : DIFFICULTY_OPTIONS.find(
+                              (option) =>
+                                option.value === userSkill.difficultyRating
+                            )?.color,
+                      }}
+                    >
+                      {
+                        DIFFICULTY_OPTIONS.find(
+                          (option) =>
+                            option.value ===
+                            (selectedDifficulties[userSkill.skillId] ||
+                              userSkill.difficultyRating)
+                        )?.icon
+                      }
+                      {selectedDifficulties[userSkill.skillId] ||
+                        userSkill.difficultyRating ||
+                        "Dificuldade"}
+                      <ChevronDown />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    {DIFFICULTY_OPTIONS.map((option) => (
+                      <DropdownMenuItem
+                        key={option.value}
+                        onClick={() => {
+                          console.log("Dificuldade selecionada:", option.value);
+                          handleUpdateDifficultyRating(
+                            userSkill.skillId,
+                            option.value
+                          );
+                        }}
+                      >
+                        <span
+                          className="inline-flex items-center gap-2"
+                          style={{ color: option.color }}
+                        >
+                          {option.icon}
+                          {option.label}
+                        </span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </CardFooter>
             </Card>
           ))}
