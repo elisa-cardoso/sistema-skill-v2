@@ -127,6 +127,9 @@ export function CreateSkill() {
         <Button type="submit" className="mt-8">
           Criar Habilidade
         </Button>
+        <Button type="submit" className="mt-8">
+          Criar Habilidade
+        </Button>
       </form>
     </div>
   );
