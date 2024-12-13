@@ -23,7 +23,7 @@ const CreateForm = z.object({
 });
 
 type CreateForm = z.infer<typeof CreateForm>;
-
+    
 export function CreateSkill() {
   const navigate = useNavigate();
   const { register, handleSubmit, setValue, control, formState: { errors } } = useForm<CreateForm>({
@@ -121,6 +121,9 @@ export function CreateSkill() {
           {errors.description && <p className="text-destructive mt-2 text-sm">{errors.description.message}</p>}
         </div>
 
+        <Button type="submit" className="mt-8">
+          Criar Habilidade
+        </Button>
         <Button type="submit" className="mt-8">
           Criar Habilidade
         </Button>
